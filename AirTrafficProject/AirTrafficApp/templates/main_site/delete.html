@@ -1,0 +1,18 @@
+{% extends "main_site/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="action_container">
+        
+        <h1 style="text-align: center;">Do you really want to Delete this?</h1>
+        <div>
+            <form method="POST" action="{% url 'delete' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            <form method="GET" action="{% url 'items' %}">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

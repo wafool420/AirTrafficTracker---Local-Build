@@ -1,0 +1,115 @@
+{% extends "main_site/layout.html" %}
+{% block title %} Data {% endblock %}
+{% block content %}
+
+
+
+<style>
+    table th, td{
+        border: 3px solid black !important;
+        vertical-align: middle !important;
+    }
+
+    @media (max-width: 768px) {
+        table {
+            font-size: 12px;
+        }
+
+        table th, table td {
+            padding: 5px;
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .btn-group {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+</style>
+
+<div class="container-fluid px-5 list-container">
+    <h1 class="text-center mt-4 fw-bold mb-4">Data Table</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm table-primary text-center align-middle">
+            <thead>
+                <tr>
+                    <th>Date of Operation</th>
+                    <th>Call Sign</th>
+                    <th>Type of Aircraft</th>
+                    <th>Category</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Actual Time</th>
+                    <th>Timeliness</th>
+                    <th>Type of Flight</th>
+                    <th>GenAv Detail</th>
+                    <th>Bird Strike</th>
+                    <th>Runway Incursion</th>
+                    <th>Logged by</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if items %}
+                    {% for item in items %}
+                        <tr class="table-light">
+                            <td>{{ item.date_of_operation }}</td>
+                            <td>{{ item.call_sign }}</td>
+                            <td>{{ item.aircraft_type }}</td>
+                            <td>{{ item.detail }}</td>
+                            <td>{{ item.origin }}</td>
+                            <td>{{ item.destination }}</td>
+                            <td>{{ item.actual_time }}</td>
+                            <td>{{ item.timeliness }}</td>
+                            <td>{{ item.type_of_flight }}</td>
+                            <td>{{ item.genav_detail }}</td>
+                            <td>{{ item.bird_strike }}</td>
+                            <td>{{ item.runway_incursion }}</td>
+                            <td>{{ item.user.username }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <form method="GET" action="{% url 'edit' item.id %}">
+                                        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                                    </form>
+                                    <form method="GET" action="{% url 'delete' item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="14">
+                            <h4 class="text-center py-3">There is currently no data available</h4>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mt-4 mb-5">
+        <form method="GET" action="{% url 'create' %}">
+            <button type="submit" class="btn btn-success btn-lg">Create</button>
+        </form>
+        <form method="GET" action="{% url 'archive' %}">
+            <button type="submit" class="btn btn-success btn-lg">Archive Dataset</button>
+        </form>
+        <form method="GET" action="{% url 'home' %}">
+            <button type="submit" class="btn btn-success btn-lg">Home</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

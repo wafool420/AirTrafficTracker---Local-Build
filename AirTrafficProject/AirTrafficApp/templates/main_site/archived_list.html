@@ -1,0 +1,379 @@
+{% extends "main_site/layout.html" %}
+{% block title %}Archived Data{% endblock %}
+
+{% block content %}
+
+<style>
+    
+    table th, table td {
+        padding: 8px !important;
+        vertical-align: middle !important;
+        border: 3px solid black !important;
+        table-layout: fixed;
+    }
+    
+    .bg-color {
+        background: #80dbff;
+        background: linear-gradient(180deg, rgba(128, 219, 255, 1) 8%, rgba(80, 191, 222, 1) 53%);
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 0 15px;
+        }
+
+        table {
+            font-size: 0.7rem;
+        }
+
+        .list-container {
+            padding: 0.25rem;
+        }
+
+        .table-responsive {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+    }
+</style>
+
+<h1 class="text-center mt-4 fw-bold list-container">Archived Datasets</h1>
+
+{% for archived in archive %} 
+    <div class="container mt-4 p-3 border border-dark border-3 rounded bg-color list-container">
+        <p class="text-dark fw-bold">Created on: {{ archived.date_created|date:"F j, Y - h:i A" }}</p>
+
+        <h3 class="text-center mb-3 fw-bold"> Data</h1>
+        <table class="table table-striped table-bordered text-center table-responsive table-primary">
+            <thead>
+                <tr>
+                    <th>Log Date</th>
+                    <th>Call Sign</th>
+                    <th>Type of Aircraft</th>
+                    <th>Category</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Actual Time</th>
+                    <th>Timeliness</th>
+                    <th>Type of Flight</th>
+                    <th>GenAv Detail</th>
+                    <th>Bird Strike</th>
+                    <th>Runway Incursion</th>
+                    <th>Logged by</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in archived.items_set.all %}
+                    <tr class="table-light">
+                        <td>{{ item.date_of_operation }}</td>
+                        <td>{{ item.call_sign }}</td>
+                        <td>{{ item.aircraft_type }}</td>
+                        <td>{{ item.detail }}</td>
+                        <td>{{ item.origin }}</td>
+                        <td>{{ item.destination }}</td>
+                        <td>{{ item.actual_time }}</td>
+                        <td>{{ item.timeliness }}</td>
+                        <td>{{ item.type_of_flight }}</td>
+                        <td>{{ item.genav_detail }}</td>
+                        <td>{{ item.bird_strike }}</td>
+                        <td>{{ item.runway_incursion }}</td>
+                        <td>{{ item.user.username }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="11">No items in this archive group.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3 class="text-center mt-4 mb-2 fw-bold"> Statistics</h1>
+        <div class="text-center">
+        
+            <ul class="list-unstyled d-inline-block text-start">
+                <table class="table table-bordered text-center table-primary table-striped">
+                    <thead>
+                        <th>Category</th>
+                        <th>No. of A/C</th>
+                    </thead>
+                    <tbody class="table-light">
+                        <tr>
+                            <th>Fixed Wing</th>
+                            <td>{{ archived.fixed_wing_count }}</td>
+                        </tr>
+                        <tr>
+                            <th>Helicopter</th>
+                            <td>{{ archived.helicopter_count }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td>{{ archived.detail_total  }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+        
+            <h4 class="mt-1 fw-bold">Air Craft Movement</h2>
+            <ul class="list-unstyled d-inline-block text-start">
+                <table class="table table-bordered text-center table-primary ">
+                    <thead>
+                        <tr>
+                            <th>-----</th>
+                            <th>Arrival</th>
+                            <th>Departure</th>
+                            <th>Enroute</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-light">
+                        <tr>
+                            <th>Commercial</th>
+                            <td>{{ archived.commercial_arrival }}</td>
+                            <td>{{ archived.commercial_departure }}</td>
+                            <td>{{ archived.commercial_enroute }}</td>
+                            <td>{{ archived.commercial_movement_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>GenAv</th>
+                            <td>{{ archived.genav_arrival }}</td>
+                            <td>{{ archived.genav_departure }}</td>
+                            <td>{{ archived.genav_enroute }}</td>
+                            <td>{{ archived.genav_movement_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Military</th>
+                            <td>{{ archived.military_arrival }}</td>
+                            <td>{{ archived.military_departure }}</td>
+                            <td>{{ archived.military_enroute }}</td>
+                            <td>{{ archived.military_movement_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>{{ archived.arrival_total }}</th>
+                            <th>{{ archived.departure_total }}</th>
+                            <th>{{ archived.enroute_total }}</th>
+                            <th>{{ archived.movement_overall_total }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+
+            <h4 class="mt-1 fw-bold">Timeliness</h4>
+            <ul class="list-unstyled d-inline-block text-start">
+                <table class="table table-bordered text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>-----</th>
+                            <th>Delayed</th>
+                            <th>On Time</th>
+                            <th>N/A</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-light"> 
+                        <tr>
+                            <th>Commercial</th>
+                            <td>{{ archived.commercial_delayed}}</td>
+                            <td>{{ archived.commercial_ontime }}</td>
+                            <td>{{ archived.commercial_na }}</td>
+                            <td>{{ archived.commercial_timeliness_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>GenAv</th>
+                            <td>{{ archived.genav_delayed }}</td>
+                            <td>{{ archived.genav_ontime }}</td>
+                            <td>{{ archived.genav_na }}</td>
+                            <td>{{ archived.genav_timeliness_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Military</th>
+                            <td>{{ archived.military_delayed }}</td>
+                            <td>{{ archived.military_ontime }}</td>
+                            <td>{{ archived.military_na }}</td>
+                            <td>{{ archived.military_timeliness_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td>{{ archived.delayed_total }}</td>
+                            <td>{{ archived.ontime_total }}</td>
+                            <td>{{ archived.na_total }}</td>
+                            <td>{{ archived.timeliness_overall_total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+
+            <h4 class="mt-1 text-center fw-bold">Bird Strike</h4>
+            <ul class="list-unstyled d-inline-block text-start">
+                <table class="table table-bordered text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>----</th>
+                            <th>Arrival</th>
+                            <th>Departure</th>
+                            <th>Total</th>
+                            <th>-----</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-light">
+                        <tr>
+                            <th>Commercial</th>
+                            <td>{{ archived.commercial_arrival_birdstrike }}</td>
+                            <td>{{ archived.commercial_departure_birdstrike }}</td>
+                            <td>{{ archived.commercial_enroute_birdstrike }}</td>
+                            <td>{{ archived.commercial_birdstrike_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>GenAv</th>
+                            <td>{{ archived.genav_arrival_birdstrike }}</td>
+                            <td>{{ archived.genav_departure_birdstrike }}</td>
+                            <td>{{ archived.genav_enroute_birdstrike }}</td>
+                            <td>{{ archived.genav_birdstrike_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Military</th>
+                            <td>{{ archived.military_arrival_birdstrike }}</td>
+                            <td>{{ archived.military_departure_birdstrike }}</td>
+                            <td>{{ archived.military_enroute_birdstrike }}</td>
+                            <td>{{ archived.military_birdstrike_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>{{ archived.arrival_total_birdstrike }}</th>
+                            <th>{{ archived.departure_total_birdstrike }}</th>
+                            <th>{{ archived.enroute_total_birdstrike }}</th>
+                            <th>{{ archived.birdstrike_overall_total }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+            <h4 class="mt-1 text-center fw-bold">Runway Intrusion</h4>
+            <ul class="list-unstyled d-inline-block text-start">
+                <table class="table table-bordered text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>----</th>
+                            <th>Arrival</th>
+                            <th>Departure</th>
+                            <th>Total</th>
+                            <th>-----</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-light"></tbody>
+                        <tr>
+                            <th>Commercial</th>
+                            <td>{{ archived.commercial_arrival_runwayintrusion }}</td>
+                            <td>{{ archived.commercial_departure_runwayintrusion }}</td>
+                            <td>{{ archived.commercial_enroute_runwayintrusion }}</td>
+                            <td>{{ archived.commercial_runwayintrusion_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>GenAv</th>
+                            <td>{{ archived.genav_arrival_runwayintrusion }}</td>
+                            <td>{{ archived.genav_departure_runwayintrusion }}</td>
+                            <td>{{ archived.genav_enroute_runwayintrusion }}</td>
+                            <td>{{ archived.genav_runwayintrusion_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Military</th>
+                            <td>{{ archived.military_arrival_runwayintrusion }}</td>
+                            <td>{{ archived.military_departure_runwayintrusion }}</td>
+                            <td>{{ archived.military_enroute_runwayintrusion }}</td>
+                            <td>{{ archived.military_runwayintrusion_total }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>{{ archived.arrival_total_runwayintrusion }}</th>
+                            <th>{{ archived.departure_total_runwayintrusion }}</th>
+                            <th>{{ archived.enroute_total_runwayintrusion }}</th>
+                            <th>{{ archived.runwayintrusion_overall_total }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+            <h4 class="mt-1 fw-bold">GenAv Movement</h2>
+<ul class="list-unstyled d-inline-block text-start">
+    <table class="table table-bordered text-center">
+        <thead class="table-primary">
+            <tr>
+                <th>-----</th>
+                <th>Arrival</th>
+                <th>Departure</th>
+                <th>Enroute</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            <tr>
+                <th>Private</th>
+                <td>{{ archived.private_arrival }}</td>
+                <td>{{ archived.private_departure }}</td>
+                <td>{{ archived.private_enroute }}</td>
+                <td>{{ archived.genav_private_total }}</td>
+            </tr>
+            <tr>
+                <th>Cargo</th>
+                <td>{{ archived.cargo_arrival }}</td>
+                <td>{{ archived.cargo_departure }}</td>
+                <td>{{ archived.cargo_enroute }}</td>
+                <td>{{ archived.genav_cargo_total }}</td>
+            </tr>
+            <tr>
+                <th>MedEvac</th>
+                <td>{{ archived.medevac_arrival }}</td>
+                <td>{{ archived.medevac_departure }}</td>
+                <td>{{ archived.medevac_enroute }}</td>
+                <td>{{ archived.genav_medevac_total }}</td>
+            </tr>
+            <tr>
+                <th>Utility</th>
+                <td>{{ archived.utility_arrival }}</td>
+                <td>{{ archived.utility_departure }}</td>
+                <td>{{ archived.utility_enroute }}</td>
+                <td>{{ archived.genav_utility_total }}</td>
+            </tr>
+            <tr>
+                <th>Training</th>
+                <td>{{ archived.training_arrival }}</td>
+                <td>{{ archived.training_departure }}</td>
+                <td>{{ archived.training_enroute }}</td>
+                <td>{{ archived.genav_training_total }}</td>
+            </tr>
+            <tr>
+                <th>Government</th>
+                <td>{{ archived.government_arrival }}</td>
+                <td>{{ archived.government_departure }}</td>
+                <td>{{ archived.government_enroute }}</td>
+                <td>{{ archived.genav_government_total }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{ archived.genav_arrival_total }}</td>
+                <td>{{ archived.genav_departure_total }}</td>
+                <td>{{ archived.genav_enroute_total }}</td>
+                <td>{{ archived.genav_overall_total }}</td>
+            </tr>
+        </tbody>
+    </table>
+</ul>
+
+
+<div class="d-flex justify-content-center gap-2 mt-4">
+    <form method="GET" action="{% url 'delete_archive' archived.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-lg mb-3 border-dark ">Delete</button>
+    </form>
+</div>
+
+        </div>
+    </div>
+{% empty %}
+    <h4 class="text-center text-muted mt-5 list-container">No archived datasets available.</h4>
+{% endfor %}
+    
+<div class="d-flex justify-content-center gap-2 mt-4 list-container">
+    <form method="GET" action="{% url 'clear_archive' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-lg mb-3">Clear Archive</button>
+    </form>
+</div>
+{% endblock %}

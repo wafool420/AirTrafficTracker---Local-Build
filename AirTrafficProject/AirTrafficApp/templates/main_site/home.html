@@ -1,0 +1,24 @@
+{% extends "main_site/layout.html" %}
+{% block title %} Home {% endblock %}
+{% block content %}
+  
+    <div class="home_container">
+        {% if request.user.is_superuser %}
+            <h1 style="text-align: center;">Welcome, Admin 🛠️</h1>
+        {% else %}
+            <h1 style="text-align: center;">Welcome, {{request.user.first_name}} {{request.user.last_name}}</h1>
+        {% endif %}
+        <div>
+            <form method="GET" action="{% url 'items' %}">
+                <button type="submit" class="btn btn-primary">View Datasheet</button>
+            </form>
+            <form method="GET" action="{% url 'create' %}">
+                <button type="submit" class="btn btn-success">Create</button>
+            </form>
+            <form method="GET" action="{% url 'logout' %}">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+    
+        </div>
+    </div>
+{% endblock %}

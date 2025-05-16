@@ -1,0 +1,20 @@
+{% extends "main_site/layout.html" %}
+{% load static %}
+{% block title %} Archive {% endblock %}
+
+{% block content %}
+    <div class="action_container">
+        
+        <h1 class="text-center fs-2">Are you sure you want to archive these data?</h1>
+        <div>
+            <form method="POST" action="{% url 'archive' %}">
+                {% csrf_token %}
+                    
+                <button type="submit" class="btn btn-danger">ARCHIVE!</button>
+            </form>
+            <form method="GET" action="{% url 'items' %}">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

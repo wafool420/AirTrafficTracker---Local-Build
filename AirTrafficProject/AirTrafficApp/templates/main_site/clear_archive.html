@@ -1,0 +1,23 @@
+{% extends "main_site/layout.html" %}
+{% load static %}
+{% block title %} Logout {% endblock %}
+
+{% block content %}
+    <div class="action_container">
+        
+        <h1 class="text-center fs-3">Are you sure you want to clear the archive?</h1>
+        <div>
+            <form method="POST" action="{% url 'clear_archive' %}">
+                {% csrf_token %}
+                    
+                <button type="submit" class="btn btn-danger">CLEAR!</button>
+            </form>
+            <form method="GET" action="{% url 'archive_view' %}">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+{% endblock %}

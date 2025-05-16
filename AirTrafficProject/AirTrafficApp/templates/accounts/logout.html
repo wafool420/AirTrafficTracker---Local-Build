@@ -1,0 +1,21 @@
+{% extends "main_site/layout.html" %}
+{% load static %}
+{% block title %} Logout {% endblock %}
+
+{% block content %}
+    <div class="action_container">
+        
+        <h1>Logout</h1>
+        <label>Do you really want to logout?</label>
+        <div>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                    
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+            <form method="GET" action="{% url 'home' %}">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

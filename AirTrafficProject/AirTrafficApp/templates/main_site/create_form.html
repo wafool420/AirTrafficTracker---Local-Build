@@ -1,0 +1,193 @@
+{% extends "main_site/layout.html" %}
+{% load static %}
+{% block title %} Create {% endblock %}
+{% block content %}
+
+<style>
+    .radio_container input[type="radio"] {
+        accent-color: #28a745; /* Change color */
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="form_container">
+    <form method="POST" class="form-control">
+      {% csrf_token %}
+  
+      {{ form.date_of_operation.label_tag }}
+      {{ form.date_of_operation }}
+  
+      {{ form.call_sign.label_tag }}
+      {{ form.call_sign }}
+  
+      {{ form.aircraft_type.label_tag }}
+      {{ form.aircraft_type }}
+  
+      {{ form.detail.label_tag }}
+      {{ form.detail }}
+
+      {{ form.type_of_flight.label_tag }}
+      {{ form.type_of_flight }}
+
+      {{ form.route_of_flight.label_tag }}
+      {{ form.route_of_flight }}
+  
+      <div class="row-container d-flex gap-2">
+        <div class="flex-item">
+          {{ form.origin.label_tag }}
+          {{ form.origin }}
+        </div>
+        
+        <div class="flex-item">
+          {{ form.destination.label_tag }}
+          {{ form.destination }}
+        </div>
+      </div>
+      {{ form.movement.label_tag }}
+      {{ form.movement }}
+  
+      {{ form.actual_time.label_tag }}
+      {{ form.actual_time }}
+
+      {{ form.timeliness.label_tag }}
+      {{ form.timeliness }}
+
+      <div id="genav_wrapper">
+        {{ form.genav_detail.label_tag }}
+        {{ form.genav_detail }}
+      </div>
+
+      {{ form.bird_strike.label_tag }}
+      <div class="radio_container">
+            {{ form.bird_strike }}
+      </div>
+      
+      {{ form.runway_incursion.label_tag }}
+      <div class="radio_container">
+            {{ form.runway_incursion }}
+      </div>
+
+      <button type="submit" class="btn btn-success btn-sm">Submit</button>
+    </form>
+  
+    <form method="GET" action="{% url 'items' %}">
+      <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+    </form>
+</div>
+
+<script>
+    const route_of_flight_Field = document.getElementById('id_route_of_flight');
+    const originField = document.getElementById('id_origin');
+    const destinationField = document.getElementById('id_destination');
+    const actualTimeField = document.getElementById('id_actual_time');
+    const callSignField = document.getElementById('id_call_sign');
+    const typeflightField = document.getElementById('id_type_of_flight');
+    const genavWrapper = document.getElementById('genav_wrapper');
+    const timelinessField = document.getElementById('id_timeliness');
+    const movementField = document.getElementById('id_movement');
+    const genavField = document.getElementById('id_genav_detail');
+
+    callSignField.value = "RP-C";
+
+    
+    function updateFields() {
+        const value = route_of_flight_Field.value;
+        console.log("Updating Route Fields - Selected Value:", value);
+        
+        if (value === '1st Route') {
+            originField.value = 'RP';
+            destinationField.value = 'RPMS';
+            actualTimeField.value = 'ARR - ';
+        } else if (value === '2nd Route') {
+            originField.value = 'RPMS';
+            destinationField.value = 'RP';
+            actualTimeField.value = 'DEP - ';
+        } else {
+            originField.value = '';
+            destinationField.value = '';
+            actualTimeField.value = 'ENRT (on Initial Contact) - ';
+        }
+    }
+
+    
+    function toggleGenAvField() {
+        if (typeflightField.value === 'GenAv') {
+            genavWrapper.style.display = 'block';
+            updateGenAvOptions();
+        } else {
+            genavWrapper.style.display = 'none';
+            genavField.value = 'N/A';
+        }
+    }
+
+    
+    const allTimelinessOptions = Array.from(timelinessField.options);
+    const allGenAvOptions = Array.from(genavField.options);
+
+    
+    function updateTimelinessOptions() {
+        const selectedType = typeflightField.value;
+        console.log("Updating Timeliness Options for:", selectedType);
+        
+        
+        timelinessField.innerHTML = '';
+
+        
+        allTimelinessOptions.forEach(option => {
+            if (option.value.startsWith(selectedType)) {
+                const clonedOption = option.cloneNode(true);
+                timelinessField.appendChild(clonedOption);
+            }
+        });
+    }
+
+    
+    function updateGenAvOptions() {
+        const selectedMovement = movementField ? movementField.value : '';
+        console.log("Updating GenAv Options for Movement:", selectedMovement);
+
+        
+        genavField.innerHTML = '';
+
+        
+        allGenAvOptions.forEach(option => {
+            if (option.value.startsWith(selectedMovement)) {
+                const clonedOption = option.cloneNode(true);
+                genavField.appendChild(clonedOption);
+            }
+        });
+
+        
+        if (genavField.options.length === 0) {
+            const naOption = document.createElement("option");
+            naOption.value = "N/A";
+            naOption.text = "N/A";
+            genavField.appendChild(naOption);
+        }
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFields();
+        toggleGenAvField();
+        updateTimelinessOptions();
+        updateGenAvOptions();
+    });
+
+    
+    typeflightField.addEventListener('change', function() {
+        toggleGenAvField();
+        updateTimelinessOptions();
+        updateGenAvOptions();
+    });
+
+    route_of_flight_Field.addEventListener('change', updateFields);
+    movementField.addEventListener('change', updateGenAvOptions);
+</script>
+
+{% endblock %}

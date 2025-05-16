@@ -1,0 +1,194 @@
+.form_container {
+    margin-top: 30px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    animation: myAnim 0.5s ease 0s 1 normal forwards;
+}
+
+.form_container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.form_container input,
+.form_container select,
+.form_container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.form_container button {
+    width: 100px;
+    margin: auto;
+}
+
+
+
+
+.home_container {
+    display: flex;
+    border: solid 3px;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+    width: 25%;
+    margin: 50px auto;
+    border: solid 5px;
+    border-radius: 10%;
+    box-shadow: 0 10px 30px rgb(110, 110, 110);
+    animation: myAnim 0.5s ease 0s 1 normal forwards;
+}
+
+.home_container div {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.action_container {
+    display: flex;
+    border: solid 3px;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+    width: 25%;
+    margin: 50px auto;
+    border: solid 5px;
+    border-radius: 10%;
+    box-shadow: 0 10px 30px rgb(110, 110, 110);
+    animation: myAnim 0.5s ease 0s 1 normal forwards;
+}
+
+.action_container div {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.login_container {
+    display: flex;
+    border: solid 3px;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+    width: 25%;
+    margin: 100px auto;
+    border: solid 5px;
+    border-radius: 10%;
+    box-shadow: 0 10px 30px rgb(110, 110, 110);
+    background-color: rgb(255, 255, 255);
+}
+
+.login_container div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.action_container {
+    display: flex;
+    border: solid 3px;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+    width: 25%;
+    margin: 100px auto;
+    border: solid 5px;
+    border-radius: 10%;
+    box-shadow: 0 10px 30px rgb(110, 110, 110);
+    background-color: rgb(255, 255, 255);
+}
+
+
+
+
+
+.register_container {
+    display: flex;
+    border: solid 3px;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 0;
+    width: 25%;
+    margin: 100px auto;
+    border: solid 5px;
+    border-radius: 10%;
+    box-shadow: 0 10px 30px rgb(110, 110, 110);
+    background-color: rgb(255, 255, 255);
+}
+
+.register_container input,
+                    select,
+                    textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    
+}
+
+.list-container {
+    animation: myAnimlist 1s ease 0s 1 normal forwards;
+}
+
+@media (max-width: 480px) {
+    .action_container, .home_container {
+        width: 300px;
+        padding: 30px 30px;
+        margin-top: 160px;
+        
+    }
+
+    .home_container h1{
+        text-align: center;
+        margin-bottom: 0;
+        
+    }
+
+    .register_container {
+        display: flex;
+        align-items: center;
+        width: 300px;
+        padding: 30px 50px;
+    }
+
+    
+}
+
+@keyframes myAnim {
+	0% {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes myAnimlist {
+	0% {
+		opacity: 0;
+		transform: translateY(-30px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+
