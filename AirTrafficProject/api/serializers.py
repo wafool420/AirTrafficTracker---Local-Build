@@ -14,6 +14,7 @@ class ItemSerializer(serializers.ModelSerializer):
             'timeliness', 'type_of_flight', 'genav_detail', 'bird_strike',
             'runway_incursion', 'movement', 'user'
         ]
+        read_only_fields = ['user']
 
     def validate(self, data):
         flight_type = data.get("type_of_flight")
@@ -58,3 +59,12 @@ class ItemSerializer(serializers.ModelSerializer):
                 data["genav_detail"] = "N/A"
 
         return data
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            validated_data['user'] = request.user
+        return super().create(validated_data)
+    
+    
+
